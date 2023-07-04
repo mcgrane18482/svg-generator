@@ -2,7 +2,7 @@ const inquirer = require('inquirer')
 const { Circle, Triangle, Rectangle } = require('./lib/Shape')
 const fs = require('fs')
 
-// write a function that gets user input for svg criteria and passes it to a constructor 
+// write a function that gets user input for svg criteria 
 function getInput() {
     inquirer.prompt([{
         name: 'text',
@@ -35,7 +35,7 @@ function getInput() {
         if (answer.shape === 'Rectangle') {
             shape = new Rectangle(answer.text, answer.textColor, answer.shapeColor)
         }
-        // create a new logo.svg file with the return from render
+        // create a new logo.svg file with the return from render()
         fs.writeFile('./dist/logo.svg', shape.render(), (err, result) => {
             if (err) throw err;
             console.log('svg created!');
