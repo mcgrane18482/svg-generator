@@ -1,5 +1,6 @@
 const inquirer = require('inquirer')
-const MakeSvg = require('MakeSvg')
+const { Circle, Triangle, Rectangle } = require('./lib/Shape')
+const fs = require('fs')
 
 // write a function that gets user input for svg criteria and passes it to a constructor 
 function getInput() {
@@ -8,24 +9,39 @@ function getInput() {
         message: 'Enter 3 letters'
     },
     {
-        name: 'text-color',
+        name: 'textColor',
         message: 'What color would you like the text to be?'
 
     },
     {
         name: 'shape',
+        type: 'list',
+        choices: ['Circle', 'Triangle', 'Rectangle'],
         message: 'What shape would you like to use?'
     },
     {
-        name: 'shape-color',
+        name: 'shapeColor',
         message: 'What color would you like the shape to be?'
     }]).then((answer) => {
-        const text = answer.text
-        const textColor = answer.text-color
-        const shape = answer.shape
-        const shapeColor = answer.shapeColor
+        let shape;
+
+        // write an if statement for passing the input to the correct shape constructor
+        if (answer.shape === 'Circle') {
+            shape = new Circle(answer.text, answer.textColor, answer.shapeColor)
+        }
+        if (answer.shape === 'Triangle') {
+            shape = new Triangle(answer.text, answer.textColor, answer.shapeColor)
+        }
+        if (answer.shape === 'Rectangle') {
+            shape = new Rectangle(answer.text, answer.textColor, answer.shapeColor)
+        }
         // pass answers to the constructor method
-        MakeSvg.generate(text, textColor, shape, shapeColor)
-        console.log('Generated logo.svg')
+
+        fs.writeFile('./dist/logo.svg', shape.render(), (err, result) => {
+            if (err) throw err;
+            console.log('svg created!');
+        })
     })
 }
+
+getInput()
